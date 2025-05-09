@@ -1,0 +1,41 @@
+# .gitignore para proyectos Vue.js
+
+# Node.js
+node_modules/
+dist/
+.env
+.env.*.local
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependencias de lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Test coverage
+coverage/
+
+# Output de build (Vue CLI o Vite)
+/dist/
+/build/
+/vite-dist/
+/*.local
+
+# Cache de herramientas
+.cache/
+.nyc_output/
+.eslintcache
