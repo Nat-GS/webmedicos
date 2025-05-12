@@ -9,7 +9,10 @@ const app = createApp(App)
 
 app.use(createPinia())  
 app.use(router)
-app.use(Toast)
+app.use(Toast, {
+  autoClose: 4000, // duración por defecto para todos
+  position: 'top-right', // opcional
+})
 
 app.mount('#app')
 

@@ -76,7 +76,9 @@ const errors = reactive({
 
 const continuarFalso = () => {
   toast.success('¡Continuemos!')
+  setTimeout(() => {
   router.push({ name: 'RegistrarServicio', query: { usuarioId: 1 } })
+}, 4000) // espera lo mismo que el toast
 }
 </script>
 
