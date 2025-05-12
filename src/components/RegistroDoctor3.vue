@@ -8,11 +8,14 @@
         <div class="step completed">2</div>
         <div class="line completed"></div>
         <div class="step active">3</div>
+        <div class="line"></div>
+        <div class="step">4</div>
       </div>
       <div class="progress-labels">
         <span class="label completed">Datos Básica</span>
         <span class="label completed">Datos Personal</span>
         <span class="label active">Datos Profesionales</span>
+        <span class="label">Documentación</span>
       </div>
 
       <h2 class="title">Información Profesional</h2>
@@ -80,7 +83,7 @@
 
         <div class="form-actions">
           <button type="button" class="cancel" @click="volver">Anterior</button>
-          <button type="submit" class="submit">Finalizar</button>
+          <button type="submit" class="submit">Siguiente</button>
         </div>
       </form>
     </div>
@@ -139,7 +142,7 @@ function handleSubmit() {
   validate()
   if (!Object.values(errors).some(e => e)) {
     store.paso3 = { ...form }
-    alert('Registro completo!')
+    router.push('/registro/paso4');
   }
 }
 

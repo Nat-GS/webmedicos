@@ -8,11 +8,14 @@
         <div class="step">2</div>
         <div class="line"></div>
         <div class="step">3</div>
+        <div class="line"></div>
+        <div class="step">4</div>
       </div>
       <div class="progress-labels">
         <span class="label active">Datos Básicos</span>
         <span class="label">Datos Personales</span>
         <span class="label">Datos Profesionales</span>
+        <span class="label">Documentación</span>
       </div>
 
       <!-- Título -->
