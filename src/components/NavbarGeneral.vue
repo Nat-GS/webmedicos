@@ -7,6 +7,8 @@
     <nav class="navbar-links">
       <router-link to="/">Inicio</router-link>
       <router-link to="/registro-usuario">Registrar Servicio</router-link>
+      <router-link to="/registro/paso1">Registro Doctor</router-link>
+
     </nav>
   </header>
 </template>
@@ -17,7 +19,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style >
 .navbar {
   background-color: #808d96; /* gris del header */
   display: flex;

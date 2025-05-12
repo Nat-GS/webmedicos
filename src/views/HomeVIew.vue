@@ -11,7 +11,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style >
 .home {
   text-align: center;
   margin-top: 40px;

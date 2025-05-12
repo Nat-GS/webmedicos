@@ -6,13 +6,13 @@ import RegistroDoctor2 from '@/components/RegistroDoctor2.vue'
 import RegistroDoctor3 from '@/components/RegistroDoctor3.vue'
 
 // Vistas generales
-import HomeView from '@/views/HomeView.vue'
+import HomeVIew from '@/views/HomeVIew.vue'
 import RegistrarServicio from '@/views/RegistrarServicio.vue'
 import RegistroUsuario from '@/views/RegistroUsuario.vue'
 
 const routes = [
   // Home
-  { path: '/', name: 'Inicio', component: HomeView },
+  { path: '/', name: 'Inicio', component: HomeVIew },
 
   // Registro de servicios
   { path: '/registrar-servicio', name: 'RegistrarServicio', component: RegistrarServicio },
