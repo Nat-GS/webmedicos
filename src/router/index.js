@@ -1,12 +1,29 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeVIew from '@/views/HomeVIew.vue'
+
+// Rutas paso a paso para registro de doctor
+import RegistroDoctor from '@/components/RegistroDoctor.vue'
+import RegistroDoctor2 from '@/components/RegistroDoctor2.vue'
+import RegistroDoctor3 from '@/components/RegistroDoctor3.vue'
+
+// Vistas generales
+import HomeView from '@/views/HomeView.vue'
 import RegistrarServicio from '@/views/RegistrarServicio.vue'
 import RegistroUsuario from '@/views/RegistroUsuario.vue'
 
 const routes = [
-  { path: '/', name: 'Inicio', component: HomeVIew },
+  // Home
+  { path: '/', name: 'Inicio', component: HomeView },
+
+  // Registro de servicios
   { path: '/registrar-servicio', name: 'RegistrarServicio', component: RegistrarServicio },
-  { path: '/registro-usuario', name: 'RegistroUsuario', component: RegistroUsuario }
+
+  // Registro de usuario proveedor
+  { path: '/registro-usuario', name: 'RegistroUsuario', component: RegistroUsuario },
+
+  // Registro paso a paso de doctor
+  { path: '/registro/paso1', name: 'Paso1', component: RegistroDoctor },
+  { path: '/registro/paso2', name: 'Paso2', component: RegistroDoctor2 },
+  { path: '/registro/paso3', name: 'Paso3', component: RegistroDoctor3 }
 ]
 
 const router = createRouter({
