@@ -8,11 +8,14 @@
         <div class="step">2</div>
         <div class="line"></div>
         <div class="step">3</div>
+        <div class="line"></div>
+        <div class="step">4</div>
       </div>
       <div class="progress-labels">
         <span class="label active">Datos Básicos</span>
         <span class="label">Datos Personales</span>
         <span class="label">Datos Profesionales</span>
+        <span class="label">Documentación</span>
       </div>
 
       <!-- Título -->
@@ -95,6 +98,7 @@
 import { reactive, onMounted, ref } from 'vue';
 import { useFormularioStore } from '@/stores/formularioStore';
 import { useRouter } from 'vue-router';
+import { toast } from 'vue3-toastify'
 
 const store = useFormularioStore();
 const router = useRouter();
@@ -131,17 +135,28 @@ onMounted(() => {
 });
 
 function handleSubmit() {
-  validate()
-  const tieneErrores = Object.values(errors).some(e => e)
+  validate();
+  const tieneErrores = Object.values(errors).some(e => e);
+
   if (!tieneErrores) {
-    store.paso1 = { ...form } 
-    router.push('/registro/paso2') 
+    store.paso1 = { ...form };
+
+    toast.success('¡Continuemos!', {
+      position: 'top-right',
+      autoClose: 2000 // duración del mensaje
+    });
+
+    // Esperar 2 segundos antes de redirigir
+    setTimeout(() => {
+      router.push('/registro/paso2');
+    }, 2000);
   }
 }
 
 
+
 function cancelar() {
-  alert('Cancelado');
+  router.push("/");
 }
 </script>
 

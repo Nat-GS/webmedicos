@@ -14,8 +14,8 @@ export const useFormularioStore = defineStore('formulario', {
     paso2: {
       fecha_nacimiento: '',
       sexo: '',
-      tipo_documento: 'CI',
-      documento_identidad: '',
+      tipoDocumento: '',
+      documentoIdentidad: '',
       extension: '',
       procedencia: ''
     },
@@ -44,8 +44,8 @@ export const useFormularioStore = defineStore('formulario', {
       this.paso2 = {
         fecha_nacimiento: '',
         sexo: '',
-        tipo_documento: 'CI',
-        documento_identidad: '',
+        tipoDocumento: '',
+        documentoIdentidad: '',
         extension: '',
         procedencia: ''
       }

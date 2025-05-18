@@ -8,11 +8,14 @@
         <div class="step completed">2</div>
         <div class="line completed"></div>
         <div class="step active">3</div>
+        <div class="line"></div>
+        <div class="step">4</div>
       </div>
       <div class="progress-labels">
         <span class="label completed">Datos Básica</span>
         <span class="label completed">Datos Personal</span>
         <span class="label active">Datos Profesionales</span>
+        <span class="label">Documentación</span>
       </div>
 
       <h2 class="title">Información Profesional</h2>
@@ -41,9 +44,15 @@
 
         <div class="form-group">
           <label>Especialidad <span class="required">*</span></label>
-          <input v-model="form.especialidad" placeholder="Ej: Pediatría" />
+          <select v-model="form.especialidad">
+            <option disabled value="">Selecciona una especialidad</option>
+            <option v-for="especialidad in especialidades" :key="especialidad.id" :value="especialidad.id">
+              {{ especialidad.nombre }}
+            </option>
+          </select>
           <p class="error" v-if="errors.especialidad">{{ errors.especialidad }}</p>
         </div>
+
 
         <div class="form-group">
         <label>Disponibilidad <span class="required">*</span></label>
@@ -80,7 +89,7 @@
 
         <div class="form-actions">
           <button type="button" class="cancel" @click="volver">Anterior</button>
-          <button type="submit" class="submit">Finalizar</button>
+          <button type="submit" class="submit">Siguiente</button>
         </div>
       </form>
     </div>
@@ -91,11 +100,13 @@
 import { reactive, ref, onMounted } from 'vue'
 import { useFormularioStore } from '@/stores/formularioStore'
 import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
 
 const store = useFormularioStore()
 const router = useRouter()
 const form = reactive({
   ...store.paso3,
+  especialidad: '',
   disponibilidad: store.paso3.disponibilidad || []
 })
 const errors = reactive({})
@@ -110,6 +121,29 @@ const diasSemana = [
   { nombre: 'Sábado', abreviado: 'Sa' },
   { nombre: 'Domingo', abreviado: 'Do' },
 ]
+
+const especialidades = ref([
+  { id: 1, nombre: 'Pediatría' },
+  { id: 2, nombre: 'Cardiología' },
+  { id: 3, nombre: 'Neurología' },
+  { id: 4, nombre: 'Dermatología' },
+  { id: 5, nombre: 'Ginecología' },
+  { id: 6, nombre: 'Oncología' },
+  { id: 7, nombre: 'Psiquiatría' },
+  { id: 8, nombre: 'Medicina Interna' },
+  { id: 9, nombre: 'Endocrinología' },
+  { id: 10, nombre: 'Neumología' },
+  { id: 11, nombre: 'Urología' },
+  { id: 12, nombre: 'Oftalmología' },
+  { id: 13, nombre: 'Otorrinolaringología' },
+  { id: 14, nombre: 'Reumatología' },
+  { id: 15, nombre: 'Traumatología' },
+  { id: 16, nombre: 'Medicina Familiar' },
+  { id: 17, nombre: 'Cirugía General' },
+  { id: 18, nombre: 'Gastroenterología' },
+  { id: 19, nombre: 'Anestesiología' },
+  { id: 20, nombre: 'Nefrología' }
+]);
 
 onMounted(() => {
   Object.assign(form, store.paso3)
@@ -139,7 +173,16 @@ function handleSubmit() {
   validate()
   if (!Object.values(errors).some(e => e)) {
     store.paso3 = { ...form }
-    alert('Registro completo!')
+
+    toast.success('¡Continuemos!', {
+      position: 'top-right',
+      autoClose: 2000
+    });
+
+    // Esperar 2 segundos antes de redirigir
+    setTimeout(() => {
+      router.push('/registro/paso4');
+    }, 2000);
   }
 }
 

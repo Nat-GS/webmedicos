@@ -8,11 +8,14 @@
         <div class="step active">2</div>
         <div class="line"></div>
         <div class="step">3</div>
+        <div class="line"></div>
+        <div class="step">4</div>
       </div>
       <div class="progress-labels">
         <span class="label completed">Datos Básicos</span>
         <span class="label active">Datos Personales</span>
         <span class="label">Datos Profesionales</span>
+        <span class="label">Documentación</span>
       </div>
 
       <h2 class="title">Información Personal</h2>
@@ -35,6 +38,7 @@
         <div class="form-group">
           <label>Tipo de Documento <span class="required">*</span></label>
           <select v-model="form.tipoDocumento">
+            <option disabled value="">Seleccione un tipo</option>
             <option value="CI">Carnet de Identidad</option>
             <option value="Pasaporte">Pasaporte</option>
           </select>
@@ -76,9 +80,10 @@
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue';
-import { useFormularioStore } from '@/stores/formularioStore';
-import { useRouter } from 'vue-router';
+import { reactive, onMounted } from 'vue'
+import { useFormularioStore } from '@/stores/formularioStore'
+import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
 
 const store = useFormularioStore();
 const router = useRouter();
@@ -105,7 +110,16 @@ function handleSubmit() {
   const invalido = Object.values(errors).some(e => e);
   if (!invalido) {
     store.paso2 = { ...form };
-    router.push('/registro/paso3');
+
+    toast.success('¡Continuemos!', {
+      position: 'top-right',
+      autoClose: 2000
+    });
+
+    // Esperar 2 segundos antes de redirigir
+    setTimeout(() => {
+      router.push('/registro/paso3');
+    }, 2000);
   }
 }
 
