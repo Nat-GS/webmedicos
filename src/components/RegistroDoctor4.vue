@@ -34,11 +34,11 @@
                     </svg>
                     </label>
                 </div>
+                <small class="file-hint">Tamaño máximo permitido: 5MB</small>
             </div>
 
           <div class="form-actions">
             <button type="button" class="cancel" @click="volver">Volver</button>
-            <button type="button" class="skip" @click="saltar">Saltar</button>
             <button type="submit" class="submit">Finalizar</button>
           </div>
 
@@ -58,22 +58,30 @@ const router = useRouter()
 
 // Campos de documentos (no obligatorios)
 const documentos = reactive({
-  certificadoMedico: null,
-  licenciaMedica: null,
+  matriculaColegio: null,
   tituloProfesional: null,
   certificadosEspecialidades: null
 })
 
 const documentosCampos = [
-  { key: 'certificadoMedico', label: 'Certificado médico' },
-  { key: 'licenciaMedica', label: 'Licencia médica' },
+  { key: 'matriculaColegio', label: 'Matrícula Colegio de Médicos' },
   { key: 'tituloProfesional', label: 'Título profesional' },
   { key: 'certificadosEspecialidades', label: 'Certificados de especialidades (opcional)' }
 ]
 
 function handleFileChange(event, key) {
-  documentos[key] = event.target.files[0]
+  const file = event.target.files[0];
+  const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+
+  if (file && file.size > maxSize) {
+    toast.error("El archivo excede el límite de 5MB.");
+    event.target.value = ""; // limpia el input
+    return;
+  }
+
+  documentos[key] = file;
 }
+
 
 
 function finalizarRegistro() {
@@ -85,17 +93,22 @@ function finalizarRegistro() {
     position: 'top-right',
     autoClose: 3000
   })
-  router.push('/')
 
-  // Aquí puedes redirigir o limpiar formulario
+  // Limpiar el formulario (campos paso1, paso2, paso3)
+  store.resetFormulario();
+
+  // Limpiar los archivos adjuntos
+  for (const key in documentos) {
+    documentos[key] = null;
+  }
+
+  // Esperar 3 segundos antes de redirigir
+  setTimeout(() => {
+    router.push('/')
+  }, 3000);
+   // Aquí puedes redirigir o limpiar formulario
 }
 
-function saltar() {
-  toast.info('Se omitió la carga de documentos', {
-    position: 'top-right',
-    autoClose: 3000
-  })
-}
 
 function volver() {
   router.push('/registro/paso3')
@@ -106,6 +119,13 @@ function volver() {
 
 
 <style scoped>
+.file-hint {
+  font-size: 0.75rem;
+  color: #888;
+  margin-top: 4px;
+}
+
+
 .form-row.document-row {
   display: flex;
   gap: 10px;

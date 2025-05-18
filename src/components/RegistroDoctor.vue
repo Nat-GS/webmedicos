@@ -98,6 +98,7 @@
 import { reactive, onMounted, ref } from 'vue';
 import { useFormularioStore } from '@/stores/formularioStore';
 import { useRouter } from 'vue-router';
+import { toast } from 'vue3-toastify'
 
 const store = useFormularioStore();
 const router = useRouter();
@@ -134,17 +135,28 @@ onMounted(() => {
 });
 
 function handleSubmit() {
-  validate()
-  const tieneErrores = Object.values(errors).some(e => e)
+  validate();
+  const tieneErrores = Object.values(errors).some(e => e);
+
   if (!tieneErrores) {
-    store.paso1 = { ...form } 
-    router.push('/registro/paso2') 
+    store.paso1 = { ...form };
+
+    toast.success('¡Continuemos!', {
+      position: 'top-right',
+      autoClose: 2000 // duración del mensaje
+    });
+
+    // Esperar 2 segundos antes de redirigir
+    setTimeout(() => {
+      router.push('/registro/paso2');
+    }, 2000);
   }
 }
 
 
+
 function cancelar() {
-  alert('Cancelado');
+  router.push("/");
 }
 </script>
 
