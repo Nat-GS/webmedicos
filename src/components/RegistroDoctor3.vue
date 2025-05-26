@@ -20,10 +20,35 @@
 
       <h2 class="title">Información Profesional</h2>
 
-      <form @submit.prevent="handleSubmit">
+        <form @submit.prevent="handleSubmit">
+          <div class="upload-field">
+            <label>{{ documentosCampos[0].label }}</label>
+            <div class="upload-container">
+              <span class="filename">{{ documentos[documentosCampos[0].key]?.name || 'Subir documento' }}</span>
+              <label class="upload-btn">
+                <input
+                  type="file"
+                  @click="mostrarAdvertenciaFoto"
+                  @change="e => handleFileChange(e, documentosCampos[0].key)"
+                  hidden
+                />
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#00b4b0" viewBox="0 0 24 24">
+                  <path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.92v4h6.5V9h3.92L12 2z" />
+                </svg>
+              </label>
+            </div>
+            <small class="file-hint">Tamaño máximo permitido: 5MB</small>
+          </div>
+
         <div class="form-group">
-          <label>Matrícula Colegio Médico <span class="required">*</span></label>
-          <input v-model="form.matricula_colm" placeholder="Ej: 12345-CBM" />
+          <label>Biografía </label>
+          <textarea v-model="form.biografia" rows="5" maxlength="500" placeholder="Describa brevemente su perfil profesional..."></textarea>
+        </div>
+
+
+        <div class="form-group">
+          <label>Matrícula Profesional Médica <span class="required">*</span></label>
+          <input v-model="form.matricula_colm" placeholder="Ej: Z-123" />
           <p class="error" v-if="errors.matricula_colm">{{ errors.matricula_colm }}</p>
         </div>
 
@@ -87,6 +112,9 @@
         <p class="error" v-if="errors.disponibilidad">{{ errors.disponibilidad }}</p>
         </div>
 
+
+
+
         <div class="form-actions">
           <button type="button" class="cancel" @click="volver">Anterior</button>
           <button type="submit" class="submit">Siguiente</button>
@@ -109,6 +137,25 @@ const form = reactive({
   especialidad: '',
   disponibilidad: store.paso3.disponibilidad || []
 })
+
+const documentos = reactive({
+  fotoperfil: null,
+})
+
+const documentosCampos = ref([
+  { key: 'foto', label: 'Foto de perfil' } // o el campo que estés usando
+])
+
+function mostrarAdvertenciaFoto() {
+  toast.info('Por favor suba una foto profesional, de preferencia con uniforme médico o mandil blanco.', {
+    position: 'top-center',
+    autoClose: 5000,
+    theme: 'colored'
+  });
+}
+
+
+
 const errors = reactive({})
 const nuevaDisponibilidad = reactive({ dia: '', hora_inicio: '', hora_fin: '' })
 const diaSeleccionado = ref('')
@@ -123,27 +170,56 @@ const diasSemana = [
 ]
 
 const especialidades = ref([
-  { id: 1, nombre: 'Pediatría' },
-  { id: 2, nombre: 'Cardiología' },
-  { id: 3, nombre: 'Neurología' },
-  { id: 4, nombre: 'Dermatología' },
-  { id: 5, nombre: 'Ginecología' },
-  { id: 6, nombre: 'Oncología' },
-  { id: 7, nombre: 'Psiquiatría' },
-  { id: 8, nombre: 'Medicina Interna' },
-  { id: 9, nombre: 'Endocrinología' },
-  { id: 10, nombre: 'Neumología' },
-  { id: 11, nombre: 'Urología' },
-  { id: 12, nombre: 'Oftalmología' },
-  { id: 13, nombre: 'Otorrinolaringología' },
-  { id: 14, nombre: 'Reumatología' },
-  { id: 15, nombre: 'Traumatología' },
-  { id: 16, nombre: 'Medicina Familiar' },
-  { id: 17, nombre: 'Cirugía General' },
-  { id: 18, nombre: 'Gastroenterología' },
-  { id: 19, nombre: 'Anestesiología' },
-  { id: 20, nombre: 'Nefrología' }
+  { id: 1, nombre: 'Alergia-inmunología' },
+  { id: 2, nombre: 'Anestesiología' },
+  { id: 3, nombre: 'Angio-flebología' },
+  { id: 4, nombre: 'Cardiología' },
+  { id: 5, nombre: 'Cir. Cardiovascular' },
+  { id: 6, nombre: 'Cir. Gastroenterológica' },
+  { id: 7, nombre: 'Cir. Oncológica' },
+  { id: 8, nombre: 'Cir. Pediátrica' },
+  { id: 9, nombre: 'Cir. Plástica/reparadora' },
+  { id: 10, nombre: 'Cir. Torácica' },
+  { id: 11, nombre: 'Cirugía General' },
+  { id: 12, nombre: 'Dermatología' },
+  { id: 13, nombre: 'Diabet-nutrición' },
+  { id: 14, nombre: 'Endocrinología' },
+  { id: 15, nombre: 'Fisiatría' },
+  { id: 16, nombre: 'Gastroenterología' },
+  { id: 17, nombre: 'Geriatría' },
+  { id: 18, nombre: 'Ginecología' },
+  { id: 19, nombre: 'Hematología' },
+  { id: 20, nombre: 'Infectología' },
+  { id: 21, nombre: 'Med. Física/rehabilitación' },
+  { id: 22, nombre: 'Medicina Del Trabajo' },
+  { id: 23, nombre: 'Medicina Familiar' },
+  { id: 24, nombre: 'Medicina General' },
+  { id: 25, nombre: 'Medicina Interna' },
+  { id: 26, nombre: 'Medicina Nuclear' },
+  { id: 27, nombre: 'Nefro-diálisis' },
+  { id: 28, nombre: 'Neonatología' },
+  { id: 29, nombre: 'Neumo-tisiología' },
+  { id: 30, nombre: 'Neurología' },
+  { id: 31, nombre: 'Neurocirugía' },
+  { id: 32, nombre: 'Odontología' },
+  { id: 33, nombre: 'Oftalmología' },
+  { id: 34, nombre: 'Oncología' },
+  { id: 35, nombre: 'Obstetricia' },
+  { id: 36, nombre: 'Otras' },
+  { id: 37, nombre: 'Otorrinolaringología' },
+  { id: 38, nombre: 'Parasitología' },
+  { id: 39, nombre: 'Pediatría' },
+  { id: 40, nombre: 'Proctología' },
+  { id: 41, nombre: 'Psiquiatría' },
+  { id: 42, nombre: 'Radiología' },
+  { id: 43, nombre: 'Radiot. Oncológica' },
+  { id: 44, nombre: 'Reumatología' },
+  { id: 45, nombre: 'Tr. Intensiva' },
+  { id: 46, nombre: 'Traumatología' },
+  { id: 47, nombre: 'Urología' }
 ]);
+
+
 
 onMounted(() => {
   Object.assign(form, store.paso3)
@@ -190,6 +266,21 @@ function volver() {
   store.paso3 = { ...form }
   router.push('/registro/paso2')
 }
+
+
+function handleFileChange(event) {
+  const file = event.target.files[0];
+  const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+
+  if (file && file.size > maxSize) {
+    toast.error("El archivo excede el límite de 5MB.");
+    event.target.value = ""; // limpia el input
+    return;
+  }
+
+  documentos.foto = file; // clave fija
+}
+
 </script>
 
 <style scoped>
@@ -427,6 +518,67 @@ function volver() {
   font-weight: bold;
   cursor: pointer;
 }
+
+
+.upload-field {
+  margin-bottom: 1.2rem;
+}
+
+.upload-field label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.upload-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  background-color: #f9f9f9;
+}
+
+.filename {
+  color: #888;
+  font-size: 0.95rem;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.upload-btn {
+  cursor: pointer;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  resize: vertical;
+  min-height: 120px;
+  max-height: 200px;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+textarea:focus {
+  border-color: #00b4b0;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 180, 176, 0.2);
+}
+
+
+
 
 /* 📱 Responsive para móviles */
 @media (max-width: 600px) {

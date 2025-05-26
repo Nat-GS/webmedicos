@@ -64,8 +64,8 @@ const documentos = reactive({
 })
 
 const documentosCampos = [
-  { key: 'matriculaColegio', label: 'Matrícula Colegio de Médicos' },
-  { key: 'tituloProfesional', label: 'Título profesional' },
+  { key: 'matriculaColegio', label: 'Matrícula Colegio de Médicos (opcional)' },
+  { key: 'tituloProfesional', label: 'Título profesional (opcional)' },
   { key: 'certificadosEspecialidades', label: 'Certificados de especialidades (opcional)' }
 ]
 

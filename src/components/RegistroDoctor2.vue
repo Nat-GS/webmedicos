@@ -66,7 +66,7 @@
 
 
         <div class="form-group">
-          <label>Procedencia</label>
+          <label>Lugar de residencia</label>
           <input v-model="form.procedencia" placeholder="Ej: Cochabamba" />
         </div>
 

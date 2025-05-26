@@ -5,6 +5,7 @@ import RegistroDoctor from '@/components/RegistroDoctor.vue'
 import RegistroDoctor2 from '@/components/RegistroDoctor2.vue'
 import RegistroDoctor3 from '@/components/RegistroDoctor3.vue'
 import RegistroDoctor4 from '@/components/RegistroDoctor4.vue'
+import RegistroTerminos from '@/components/RegistroTerminos.vue'
 
 // Vistas generales
 import HomeVIew from '@/views/HomeVIew.vue'
@@ -25,7 +26,8 @@ const routes = [
   { path: '/registro/paso1', name: 'Paso1', component: RegistroDoctor },
   { path: '/registro/paso2', name: 'Paso2', component: RegistroDoctor2 },
   { path: '/registro/paso3', name: 'Paso3', component: RegistroDoctor3 },
-  { path: '/registro/paso4', name: 'Paso4', component: RegistroDoctor4 }
+  { path: '/registro/paso4', name: 'Paso4', component: RegistroDoctor4 },
+  { path: '/registro/paso0', name: 'Paso0', component: RegistroTerminos }
 ]
 
 const router = createRouter({
