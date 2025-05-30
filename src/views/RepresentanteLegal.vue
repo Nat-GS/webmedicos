@@ -1,67 +1,61 @@
-
 <template>
   <div class="background">
     <div class="form-card">
       <!-- Progreso -->
       <div class="progress">
-        <div class="step active">1</div>
-        <div class="line"></div>
-        <div class="step">2</div>
+        <div class="step completed">1</div>
+        <div class="line completed"></div>
+        <div class="step active">2</div>
         <div class="line"></div>
         <div class="step">3</div>
       </div>
       <div class="progress-labels">
-        <span class="label active">Usuario</span>
-        <span class="label">Representante</span>
+        <span class="label completed">Usuario</span>
+        <span class="label active">Representante</span>
         <span class="label">Servicio</span>
       </div>
 
-      <h2 class="title">Registro de Usuario</h2>
+      <h2 class="title">Datos del Representante Legal</h2>
 
-       <form @submit.prevent="continuarFalso">
+      <form @submit.prevent="guardarDatosRepresentante">
         <div class="form-group">
-          <label>Nombre del servicio <span class="required">*</span></label>
-          <input v-model="form.nombre" type="text" />
-          <p v-if="errors.nombre" class="error">{{ errors.nombre }}</p>
-        </div>
-        <div class="form-group">
-          <label>Nombre legal del servicio <span class="required">*</span></label>
-          <input v-model="form.legal" type="text" />
-          <p v-if="errors.legal" class="error">{{ errors.legal }}</p>
+          <label>Nombre <span class="required">*</span></label>
+          <input v-model="form.nombre" type="text" required />
         </div>
 
         <div class="form-group">
-          <label>Correo institucional <span class="required">*</span></label>
-          <input v-model="form.correo" type="email" />
-          <p v-if="errors.correo" class="error">{{ errors.correo }}</p>
+          <label>Apellido <span class="required">*</span></label>
+          <input v-model="form.apellido" type="text" required />
         </div>
-        <!-- Contraseña -->
-<div class="form-group">
-  <label>Contraseña <span class="required">*</span></label>
-  <div class="password-input">
-    <input :type="mostrarPassword ? 'text' : 'password'" v-model="form.password" />
-    <button type="button" @click="mostrarPassword = !mostrarPassword">
-      <img :src="mostrarPassword ? verIcon : ocultoIcon" alt="Toggle" class="eye-icon" />
-    </button>
-  </div>
-  <p v-if="errors.password" class="error">{{ errors.password }}</p>
-</div>
 
+        <div class="form-group">
+          <label>CI o Pasaporte <span class="required">*</span></label>
+          <input v-model="form.ci" type="text" required />
+        </div>
 
-<!-- Confirmar Contraseña -->
-<div class="form-group">
-  <label>Confirmar contraseña <span class="required">*</span></label>
-  <div class="password-input">
-    <input :type="mostrarConfirmPassword ? 'text' : 'password'" v-model="form.confirmPassword" />
-    <button type="button" @click="mostrarConfirmPassword = !mostrarConfirmPassword">
-      <img :src="mostrarConfirmPassword ? verIcon : ocultoIcon" alt="Toggle" class="eye-icon" />
-    </button>
-  </div>
-  <p v-if="errors.confirmPassword" class="error">{{ errors.confirmPassword }}</p>
-</div>
+        <div class="form-group">
+          <label>Extensión</label>
+          <select v-model="form.extension">
+            <option disabled value="">Selecciona una</option>
+            <option value="LP">La Paz</option>
+            <option value="CB">Cochabamba</option>
+            <option value="SC">Santa Cruz</option>
+            <option value="OR">Oruro</option>
+            <option value="PT">Potosí</option>
+            <option value="TJ">Tarija</option>
+            <option value="CH">Chuquisaca</option>
+            <option value="BN">Beni</option>
+            <option value="PD">Pando</option>
+          </select>
+        </div>
 
-<div class="form-actions">
-          <button type="button" class="cancel" @click="router.push('/')">Cancelar</button>
+        <div class="form-group">
+          <label>Correo electrónico <span class="required">*</span></label>
+          <input v-model="form.email" type="email" required />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="cancel" @click="router.push('/registro-usuario')">Volver</button>
           <button type="submit" class="submit">Siguiente</button>
         </div>
       </form>
@@ -70,59 +64,45 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { reactive, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { toast } from 'vue3-toastify'
-import { ref } from 'vue'
-import ocultoIcon from '@/assets/oculto.png'
-import verIcon from '@/assets/ver.png'
-
-
-const mostrarPassword = ref(false)
-const mostrarConfirmPassword = ref(false)
 
 const router = useRouter()
+const route = useRoute()
 
 const form = reactive({
   nombre: '',
-  legal: '',
-  correo: '',
-  password: '',
-  confirmPassword: '',
-  tipoUsuarioId: ''
+  apellido: '',
+  ci: '',
+  extension: '',
+  email: '',
+  usuarioId: ''
 })
 
-// No haremos validación real, pero errors debe existir
-const errors = reactive({
-  nombre: '',
-  legal: '',
-  correo: '',
-  password: '',
-  confirmPassword: '',
-  tipoUsuarioId: ''
-})
-
-const continuarFalso = () => {
-  // Resetear errores
-  errors.password = ''
-  errors.confirmPassword = ''
-
-  // Validación de contraseñas iguales
-  if (form.password !== form.confirmPassword) {
-    errors.confirmPassword = 'Las contraseñas no coinciden'
+onMounted(() => {
+  const usuarioId = route.query.usuarioId
+  if (!usuarioId) {
+    toast.error('ID de usuario no encontrado en la URL')
+    router.push('/')
     return
   }
+  form.usuarioId = usuarioId
+})
 
+const guardarDatosRepresentante = () => {
+  // Guardar datos temporalmente si se necesita
+  localStorage.setItem('representanteLegal', JSON.stringify(form))
+
+  toast.success('Datos del representante guardados ✅')
+
+  // Redirigir al siguiente paso con el mismo usuarioId
   toast.success('¡Continuemos!')
   setTimeout(() => {
-    router.push({ name: 'RepresentanteLegal', query: { usuarioId: 1 } })
+    router.push({ name: 'RegistrarServicio', query: { usuarioId: 1 } })
   }, 4000)
 }
-
-
-
 </script>
-
 
 <style >
 .background {

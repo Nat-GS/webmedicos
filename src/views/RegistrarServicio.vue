@@ -5,10 +5,13 @@
       <div class="progress">
         <div class="step completed">1</div>
         <div class="line completed"></div>
-        <div class="step active">2</div>
+        <div class="step completed">2</div>
+        <div class="line completed"></div>
+        <div class="step active">3</div>
       </div>
       <div class="progress-labels">
         <span class="label completed">Usuario</span>
+        <span class="label completed">Representante</span>
         <span class="label active">Servicio</span>
       </div>
 
@@ -16,24 +19,19 @@
 
       <form @submit.prevent="registrarServicio">
         <div class="form-group">
-          <label>Categoría <span class="required">*</span></label>
-          <select v-model="form.categoria">
-            <option disabled value="">Selecciona una</option>
-            <option value="Farmacia">Farmacia</option>
-            <option value="Laboratorio">Laboratorio</option>
-          </select>
-        </div>
+  <label>Categoría <span class="required">*</span></label>
+  <select v-model="form.categoria">
+    <option disabled value="">Selecciona una</option>
+    <option value="Farmacia">Farmacia</option>
+    <option value="Laboratorio">Laboratorio</option>
+    <option value="Imagenología">Imagenología</option>
+    <option value="Enfermería">Enfermería</option>
+    <option value="Ambulancia">Ambulancia</option>
+  </select>
+</div>
+
 
         <!-- Campos comunes -->
-        <div class="form-group">
-          <label>Nombre del servicio <span class="required">*</span></label>
-          <input v-model="form.nombreServicio" type="text" />
-        </div>
-
-        <div class="form-group">
-          <label>Nombre legal <span class="required">*</span></label>
-          <input v-model="form.nombreLegal" type="text" />
-        </div>
 
         <div class="form-group">
           <label>NIT <span class="required">*</span></label>
@@ -72,18 +70,43 @@
         </div>
 
         <div class="form-group">
-          <label>Tipo de servicio que ofrece <span class="required">*</span></label>
-          <input v-model="form.tipoServicio" type="text" />
-        </div>
+  <label>Servicios que ofrece <span class="required">*</span></label>
+  <div class="checkbox-grid-aligned">
+    <div
+      v-for="servicio in serviciosCompletos"
+      :key="servicio"
+      class="checkbox-item"
+    >
+      <span class="label-text">{{ servicio }}</span>
+      <input
+        type="checkbox"
+        :value="servicio"
+        v-model="form.serviciosOfrecidos"
+      />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Otro servicio (especifique):</label>
+    <div class="form-row">
+      <input
+        v-model="form.otroServicio"
+        type="text"
+        placeholder="Ej: Hemodiálisis"
+        @keyup.enter="agregarOtroServicio"
+      />
+      <button type="button" @click="agregarOtroServicio" class="submit">Agregar</button>
+    </div>
+  </div>
+</div>
+
+
+
+
 
         <div class="form-group">
           <label>Teléfono de contacto</label>
           <input v-model="form.telefonoContacto" type="tel" />
-        </div>
-
-        <div class="form-group">
-          <label>Correo de contacto (Gmail)</label>
-          <input v-model="form.gmailContacto" type="email" />
         </div>
 
         <div class="form-group">
@@ -92,33 +115,16 @@
         </div>
 
         <div class="form-group">
-          <label>Información para el manejo financiero</label>
-          <textarea v-model="form.infoFinanciera"></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Cuenta bancaria</label>
+          <label>Número de cuenta bancaria</label>
           <input v-model="form.cuentaBancaria" type="text" />
         </div>
-
         <div class="form-group">
-          <label>Representante legal <span class="required">*</span></label>
-          <input v-model="form.representanteLegal" type="text" />
-        </div>
-
-        <div class="form-row">
-          <div class="form-group half">
-            <label>CI del representante legal <span class="required">*</span></label>
-            <input v-model="form.ciRepresentante" type="number" />
-          </div>
-          <div class="form-group half">
-            <label>Complemento</label>
-            <input v-model="form.complementoCi" type="text" />
-          </div>
+          <label>Entidad financiera</label>
+          <input v-model="form.entidad" type="text" />
         </div>
 
         <div class="form-actions">
-          <button type="button" class="cancel" @click="router.push('/')">Cancelar</button>
+          <button type="button" class="cancel" @click="router.push('/registro-representante')">Volver</button>
           <button type="submit" class="submit">Finalizar</button>
         </div>
       </form>
@@ -133,6 +139,25 @@ import { toast } from 'vue3-toastify'
 
 const router = useRouter()
 const route = useRoute()
+
+import { computed, ref } from 'vue'
+
+const serviciosPredefinidos = [
+  'Consulta médica',
+  'Exámenes de laboratorio',
+  'Ecografía',
+  'Vacunación',
+  'Atención domiciliaria'
+]
+
+const serviciosPersonalizados = ref([])
+
+const serviciosCompletos = computed(() => [
+  ...serviciosPredefinidos,
+  ...serviciosPersonalizados.value
+])
+
+
 
 const form = reactive({
   usuarioId: '',
@@ -152,7 +177,10 @@ const form = reactive({
   cuentaBancaria: '',
   representanteLegal: '',
   ciRepresentante: '',
-  complementoCi: ''
+  complementoCi: '',
+  entidad: '',
+  serviciosOfrecidos: [],
+  otroServicio: '',
 })
 
 onMounted(() => {
@@ -165,6 +193,18 @@ const agregarSucursal = () => {
 
 const eliminarSucursal = (index) => {
   form.direccionesSucursales.splice(index, 1)
+}
+const agregarOtroServicio = () => {
+  const nuevo = form.otroServicio.trim()
+  if (
+    nuevo &&
+    !serviciosPersonalizados.value.includes(nuevo) &&
+    !serviciosPredefinidos.includes(nuevo)
+  ) {
+    serviciosPersonalizados.value.push(nuevo)
+    form.serviciosOfrecidos.push(nuevo) // marcarlo como seleccionado
+    form.otroServicio = ''
+  }
 }
 
 const registrarServicio = () => {
@@ -374,6 +414,26 @@ const registrarServicio = () => {
   font-weight: bold;
   cursor: pointer;
 }
+.checkbox-grid-aligned {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem 2rem;
+  margin-top: 0.5rem;
+}
+
+.checkbox-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.label-text {
+  flex-grow: 1;
+  text-align: left;
+}
+
+
 
 @media (max-width: 600px) {
   .form-card {
