@@ -209,7 +209,8 @@ const agregarOtroServicio = () => {
 
 const registrarServicio = () => {
   toast.success('Servicio registrado correctamente ✅')
-  router.push('/')
+  router.push({ name: 'TerminosServicio' })
+
 }
 </script>
 

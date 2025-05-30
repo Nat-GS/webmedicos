@@ -12,6 +12,7 @@ import HomeVIew from '@/views/HomeVIew.vue'
 import RegistrarServicio from '@/views/RegistrarServicio.vue'
 import RegistroUsuario from '@/views/RegistroUsuario.vue'
 import RepresentanteLegal from '@/views/RepresentanteLegal.vue'
+import TerminosServicio from '@/components/TerminosServicio.vue'
 
 const routes = [
   // Home
@@ -27,6 +28,11 @@ const routes = [
     name: 'RepresentanteLegal',
     component: RepresentanteLegal
   },
+{
+  path: '/terminos-servicio',
+  name: 'TerminosServicio',
+  component: TerminosServicio
+},
 
   // Registro paso a paso de doctor
   { path: '/registro/paso1', name: 'Paso1', component: RegistroDoctor },
